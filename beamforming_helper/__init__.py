@@ -43,8 +43,8 @@ class beamforming_helper(thesdk):
         self.antenna_spacing_type = 'fmax' # 'fmax' or 'fc' 
         self.Nant = 16
         self.sub_array_size = 2
-        self.target_angle_layer0 = [-50] # degrees
-        self.target_angle_final = [40] # degrees
+        self.target_angle_layer0 = [-55] # degrees
+        self.target_angle_final = [-30] # degrees
         self.inter_element_spacing = 0
         self.sign_vector = np.ones((self.Nant)) #select between beamforming and nulling
 
@@ -208,6 +208,8 @@ class beamforming_helper(thesdk):
         ax.set_xticks(ticks=np.linspace(-90,90,19),minor=True)
         #plt.axes().tick_params(axis='y', which='minor', bottom=False)
         ax.yaxis.set_tick_params(which='minor', bottom=False)
+        plt.ylabel("Normalized Gain (dB)")
+        plt.xlabel("Incident angle (degrees)")
 
         plt.grid(visible=True, which='both', axis ='x')
         plt.ylim(-40,5)
@@ -318,13 +320,21 @@ if __name__=="__main__":
     import plot_format
     plot_format.set_style('ieeetran')
     bh=beamforming_helper()
+
+    # Simple beamforming 
+    #bh.test_main()
+
+    # Test for separate beam-nulling (analog) and beamforming (digital) steps
     x=bh.Nant
-    bh.test_main()
+    #bh.test_sub_array_nulling() #nullig section only
+    bh.test_hybrid_beamforming() #normal sub-arrays
+    bh.Nant=x #test_hybrid_beamforming changs self.Nat, should be fixed
+    bh.test_overlapping_sub_array_hybrid_beamforming() #overlapping subarrays
+
+
+    # simulation for testing concept of
+    #E. Ghaderi, A. S. Ramani, A. A. Rahimi, D. Heo, S. Shekhar and S. Gupta, "Four-Element Wide Modulated Bandwidth MIMO Receiver With >35-dB Interference Cancellation," in IEEE Transactions on Microwave Theory and Techniques, vol. 68, no. 9, pp. 3930-3941, Sept. 2020, doi: 10.1109/TMTT.2020.2986441.
     #bh.test_truncated_hadamar_matrix()
-    #bh.test_sub_array_nulling()
-    bh.test_hybrid_beamforming()
-    bh.Nant=x
-    bh.test_overlapping_sub_array_hybrid_beamforming()
 
 
     plt.show(block=False);
