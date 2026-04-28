@@ -42,13 +42,10 @@ class beamforming_helper(thesdk):
         self.bw = 0.1e9 
         self.antenna_spacing_type = 'fmax' # 'fmax' or 'fc' 
         self.Nant = 16
-        self.sub_array_size = 2
+        self.sub_array_size = 0
         self.target_angle_layer0 = [-55] # degrees
         self.target_angle_final = [-30] # degrees
         self.inter_element_spacing = 0
-        self.sign_vector = np.ones((self.Nant)) #select between beamforming and nulling
-
-
 
         self.IOS=Bundle()            # Pointer for input data
         self.IOS.Members['A']=IO()   # Pointer for input data
@@ -65,6 +62,7 @@ class beamforming_helper(thesdk):
         self.init()
 
     def init(self):
+        self.sign_vector = np.ones((self.Nant)) #select between beamforming and nulling
         self.angles = np.arange(-90,90,1/self.angular_resolution)
         self.calculate_inter_element_spacing()
         pass #Currently nohing to add
