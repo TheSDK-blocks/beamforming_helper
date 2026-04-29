@@ -46,6 +46,7 @@ class beamforming_helper(thesdk):
         self.target_angle_layer0 = [-55] # degrees
         self.target_angle_final = [-30] # degrees
         self.inter_element_spacing = 0
+        self.apply_bulk_shift = False
 
         self.IOS=Bundle()            # Pointer for input data
         self.IOS.Members['A']=IO()   # Pointer for input data
@@ -129,8 +130,9 @@ class beamforming_helper(thesdk):
         for t in target_angle:
             self.propagation_delays[i] = np.arange(self.Nant)*inter_element_spacing*np.sin(np.deg2rad(t))/self.speedoflight;
             i += 1
-        if np.min(self.propagation_delays) < 0:
-            self.propagation_delays += abs(np.min(self.propagation_delays)) #remove negative delays
+        if self.apply_bulk_shift:
+            if np.min(self.propagation_delays) < 0:
+                self.propagation_delays += abs(np.min(self.propagation_delays)) #remove negative delays
 
         return self.propagation_delays
 
